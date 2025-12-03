@@ -1,4 +1,5 @@
-import { Direction, RoomMode } from "@prisma/client";
+export type RoomMode = "DUAL" | "RANDOM" | "ASC_ONLY";
+export type Direction = "ASC" | "DESC" | "NONE";
 
 /** Format a numeric plate number to three digits (e.g. 7 -> 007). */
 export function formatPlateNumber(num: number) {

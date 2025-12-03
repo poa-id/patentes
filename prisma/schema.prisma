@@ -7,64 +7,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum RoomMode {
-  DUAL
-  RANDOM
-  ASC_ONLY
-}
-
-enum RoomRole {
-  HOST
-  PLAYER
-}
-
-enum Direction {
-  ASC
-  DESC
-  NONE
-}
-
 model User {
   id           String   @id @default(uuid())
   username     String   @unique
   passwordHash String
   createdAt    DateTime @default(now())
   rooms        Room[]   @relation("UserRooms")
+  memberships  RoomMember[] @relation("UserRoomMembers")
   entries      PlateEntry[]
 }
 
 model Room {
-  id        String        @id @default(uuid())
-  name      String
-  hostId    String
-  mode      RoomMode
-  createdAt DateTime      @default(now())
-  host      User          @relation("UserRooms", fields: [hostId], references: [id])
-  members   RoomMember[]
-  entries   PlateEntry[]
+  id         String   @id @default(uuid())
+  name       String
+  hostId     String
+  inviteCode String?  @unique
+  mode       String   @default("DUAL")
+  createdAt  DateTime @default(now())
+  host       User     @relation("UserRooms", fields: [hostId], references: [id])
+  members    RoomMember[]
+  entries    PlateEntry[]
 }
 
 model RoomMember {
-  id      String   @id @default(uuid())
-  roomId  String
-  userId  String
-  role    RoomRole
+  id        String   @id @default(uuid())
+  roomId    String
+  userId    String
+  role      String   @default("PLAYER")
   createdAt DateTime @default(now())
-  room    Room     @relation(fields: [roomId], references: [id])
-  user    User     @relation(fields: [userId], references: [id])
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user      User     @relation("UserRoomMembers", fields: [userId], references: [id])
 
   @@unique([roomId, userId])
 }
 
 model PlateEntry {
-  id        String    @id @default(uuid())
+  id        String   @id @default(uuid())
   roomId    String
   number    Int
-  direction Direction
+  direction String   @default("NONE")
   foundById String
-  foundAt   DateTime  @default(now())
-  room      Room      @relation(fields: [roomId], references: [id])
-  foundBy   User      @relation(fields: [foundById], references: [id])
+  foundAt   DateTime @default(now())
+  room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  foundBy   User     @relation(fields: [foundById], references: [id])
 
   @@unique([roomId, number])
   @@index([roomId, number])
