@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum RoomMode {
+  DUAL
+  RANDOM
+  ASC_ONLY
+}
+
+enum RoomRole {
+  HOST
+  PLAYER
+}
+
+enum Direction {
+  ASC
+  DESC
+  NONE
+}
+
+model User {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  rooms        Room[]   @relation("UserRooms")
+  entries      PlateEntry[]
+}
+
+model Room {
+  id        String        @id @default(uuid())
+  name      String
+  hostId    String
+  mode      RoomMode
+  createdAt DateTime      @default(now())
+  host      User          @relation("UserRooms", fields: [hostId], references: [id])
+  members   RoomMember[]
+  entries   PlateEntry[]
+}
+
+model RoomMember {
+  id      String   @id @default(uuid())
+  roomId  String
+  userId  String
+  role    RoomRole
+  createdAt DateTime @default(now())
+  room    Room     @relation(fields: [roomId], references: [id])
+  user    User     @relation(fields: [userId], references: [id])
+
+  @@unique([roomId, userId])
+}
+
+model PlateEntry {
+  id        String    @id @default(uuid())
+  roomId    String
+  number    Int
+  direction Direction
+  foundById String
+  foundAt   DateTime  @default(now())
+  room      Room      @relation(fields: [roomId], references: [id])
+  foundBy   User      @relation(fields: [foundById], references: [id])
+
+  @@unique([roomId, number])
+  @@index([roomId, number])
+}

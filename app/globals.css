@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background: #008080;
+  font-family: 'MS Sans Serif', Tahoma, Geneva, sans-serif;
+  color: #000;
+}
+
+a {
+  color: inherit;
+}
+
+.win98-window {
+  background: #c0c0c0;
+  border: 2px solid #fff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  box-shadow: inset -1px -1px 0 #000000, inset 1px 1px 0 #ffffff;
+}
+
+.win98-border {
+  border: 2px solid #fff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+}
+
+.win98-button {
+  background: #c0c0c0;
+  border: 2px solid #fff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  box-shadow: inset -1px -1px 0 #000000, inset 1px 1px 0 #ffffff;
+  padding: 0.35rem 0.8rem;
+}
+
+.win98-button:active {
+  border: 2px solid #808080;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  box-shadow: inset -1px -1px 0 #ffffff, inset 1px 1px 0 #000000;
+}
+
+.win98-input {
+  background: #ffffff;
+  border: 2px solid #808080;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  padding: 0.35rem 0.4rem;
+  box-shadow: inset -1px -1px 0 #000000, inset 1px 1px 0 #ffffff;
+}
+
+.win98-card {
+  background: #e0e0e0;
+  border: 1px solid #808080;
+  box-shadow: inset -1px -1px 0 #ffffff, inset 1px 1px 0 #000000;
+}
